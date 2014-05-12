@@ -210,7 +210,7 @@ Graph.prototype.calculateSpt = (function (root) {
 				current.children.push(edge.v);
 				fff++;
 			}
-			if (fff > 4) break;
+			if (fff > 2) break;
 		}
     };
 	
@@ -367,7 +367,7 @@ function generateReg3Verticles() {
 	// top 
 	v.push(new Vertex(i++, center[0], center[1] - dVert, radius));
 	v.push(new Vertex(i++, center[0] - dDiag, center[1] - dVert - dDiag, radius));
-	v.push(new Vertex(i++, center[0] + dDiag, center[1] - dVert - dDiag, radius));
+	v.push(new Vertex(i++, center[0] + dDiag * 1.3, center[1] - dVert - dDiag * 0.2, radius));
 	
 	// left
 	v.push(new Vertex(i++, center[0] - dDiag, center[1] + dDiag, radius));
@@ -377,7 +377,7 @@ function generateReg3Verticles() {
 	// right
 	v.push(new Vertex(i++, center[0] + dDiag, center[1] + dDiag, radius));
 	v.push(new Vertex(i++, center[0] + dDiag, center[1] + dDiag + dVert, radius));
-	v.push(new Vertex(i++, center[0] + 2 * dDiag, center[1], radius));
+	v.push(new Vertex(i++, center[0] + 1.5 * dDiag - dDiag * 0.2, center[1], radius));
 	
 	return v;
 }

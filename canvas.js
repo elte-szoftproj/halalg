@@ -124,6 +124,7 @@ GraphCanvas.prototype.drawHyperbolic = (function() {
 		ctx.moveTo(centX + (vert.hypX * radius), centY + (vert.hypY * radius));
 		ctx.lineTo(centX + (vert.parent.hypX * radius), centY + (vert.parent.hypY * radius));
 		ctx.strokeStyle = 'rgba(200, 200, 200, 100)';
+		ctx.lineWidth = 3;
 		ctx.stroke();	
 	}
 	
@@ -140,17 +141,15 @@ GraphCanvas.prototype.drawHyperbolic = (function() {
 			ctx.beginPath();
 			ctx.lineTo(centX + (vert1.hypX * radius), centY + (vert1.hypY * radius));
 			ctx.lineTo(centX + (vert2.hypX * radius), centY + (vert2.hypY * radius));
-			ctx.strokeStyle = 'rgba(250, 0, 0, 20)';
+			ctx.strokeStyle = '#72FF72';
+			ctx.lineWidth = 10;
 			ctx.stroke();	
 		}
 		
 		var vert = this.normalSelected;
 		ctx.beginPath();
-		ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 3, 0, 2 * Math.PI, false);
-		ctx.fillStyle = 'yellow';
-		ctx.fill();
-		ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 5, 0, 2 * Math.PI, false);
-		ctx.fillStyle = 'orange';
+		ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 14, 0, 2 * Math.PI, false);
+		ctx.fillStyle = 'cyan';
 		ctx.fill();
 	}
 	
@@ -200,7 +199,7 @@ GraphCanvas.prototype.drawHyperbolic = (function() {
 		} else if (vert.onNormalRoute || vert.onHyperbolicRoute) {
 			if (vert.onNormalRoute) {
 				ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 10, 0, 2 * Math.PI, false);
-				ctx.fillStyle = 'cyan';
+				ctx.fillStyle = 'purple';
 			}
 			if (vert.onHyperbolicRoute) {
 				ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 7, 0, 2 * Math.PI, false);
@@ -242,6 +241,7 @@ GraphCanvas.prototype.drawNormal = (function() {
 		ctx.moveTo(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio);
 		ctx.lineTo(this.normalPadleft + vert.parent.normalX * this.normalRatio, vert.parent.normalY * this.normalRatio);
 		ctx.strokeStyle = 'rgba(200, 200, 200, 100)';
+		ctx.lineWidth = 3;
 		ctx.stroke();
 	}
 	
@@ -293,7 +293,7 @@ GraphCanvas.prototype.drawNormal = (function() {
 		if (vert.onNormalRoute || vert.onHyperbolicRoute) {
 			if (vert.onNormalRoute) {
 				ctx.beginPath();
-				ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 15, 0, 2 * Math.PI, false);
+				ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 10, 0, 2 * Math.PI, false);
 				ctx.fillStyle = 'purple';
 			}
 			if (vert.onHyperbolicRoute) {
