@@ -188,27 +188,35 @@ GraphCanvas.prototype.drawHyperbolic = (function() {
 		
 		ctx.beginPath();
 		ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 3, 0, 2 * Math.PI, false);
-		if (vert == this.graph.root) {
-			ctx.fillStyle = 'red';
-		} else if (vert == this.startNode) {
-			ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 5, 0, 2 * Math.PI, false);
+		if (vert == this.startNode) {
+			ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 10, 0, 2 * Math.PI, false);
 			ctx.fillStyle = 'blue';
 		} else if (vert == this.endNode) {
-			ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 5, 0, 2 * Math.PI, false);
-			ctx.fillStyle = 'orange';
+			ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 10, 0, 2 * Math.PI, false);
+			ctx.fillStyle = 'yellow';
 		} else if (vert.onNormalRoute || vert.onHyperbolicRoute) {
 			if (vert.onNormalRoute) {
+				ctx.beginPath();
 				ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 10, 0, 2 * Math.PI, false);
 				ctx.fillStyle = 'purple';
+				ctx.fill();
 			}
 			if (vert.onHyperbolicRoute) {
+				ctx.beginPath();
 				ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 7, 0, 2 * Math.PI, false);
 				ctx.fillStyle = 'orange';
+				ctx.fill();
 			}
 		} else {
 			ctx.fillStyle = 'green';
 		}
 		ctx.fill();
+		if (vert == this.graph.root) {
+			ctx.beginPath();
+			ctx.arc(centX + (vert.hypX * radius), centY + (vert.hypY * radius), 3, 0, 2 * Math.PI, false);
+			ctx.fillStyle = 'red';
+			ctx.fill();
+		} 
 	}
 	
 });
@@ -278,30 +286,34 @@ GraphCanvas.prototype.drawNormal = (function() {
 		var vert = graph.verticles[idx];
 		ctx.beginPath();
 		ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 3, 0, 2 * Math.PI, false);
-		if (vert == this.graph.root) {
-			ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 5, 0, 2 * Math.PI, false);
-			ctx.fillStyle = 'red';
-		} else if (vert == this.startNode) {
-			ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 5, 0, 2 * Math.PI, false);
+		if (vert == this.startNode) {
+			ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 10, 0, 2 * Math.PI, false);
 			ctx.fillStyle = 'blue';
 		} else if (vert == this.endNode) {
-			ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 5, 0, 2 * Math.PI, false);
-			ctx.fillStyle = 'orange';
-		} else {
-			ctx.fillStyle = 'green';
-		}
-		if (vert.onNormalRoute || vert.onHyperbolicRoute) {
+			ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 10, 0, 2 * Math.PI, false);
+			ctx.fillStyle = 'yellow';
+		} else if (vert.onNormalRoute || vert.onHyperbolicRoute) {
 			if (vert.onNormalRoute) {
 				ctx.beginPath();
 				ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 10, 0, 2 * Math.PI, false);
 				ctx.fillStyle = 'purple';
+				ctx.fill();
 			}
 			if (vert.onHyperbolicRoute) {
 				ctx.beginPath();
 				ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 7, 0, 2 * Math.PI, false);
 				ctx.fillStyle = 'orange';
+				ctx.fill();
 			}
-		}
+		} else {
+			ctx.fillStyle = 'green';
+		} 
 		ctx.fill();
+		if (vert == this.graph.root) {
+			ctx.beginPath();
+			ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 5, 0, 2 * Math.PI, false);
+			ctx.fillStyle = 'red';
+			ctx.fill();
+		}
 	}
 });
