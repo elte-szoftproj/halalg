@@ -2,7 +2,8 @@ var graph;
 var graphcanv;
 
 $(document).ready(function() {
-	var verticles = generateVerticles(30, 50);
+	//var verticles = generateVerticles(40, 70);
+	var verticles = generateReg3Verticles();
     var edges = generateConnections(verticles);
    
     graph = new Graph(verticles, edges);

@@ -43,17 +43,21 @@ Vertex.prototype.hypDistanceFrom = (function(o) {
 	var ya = this.hypY;
 	var xb = o.hypX;
 	var yb = o.hypY;
-	var top = "(1 - (" + xa + ")*(" + xb + ") - (" + ya + ")*(" + yb + "))";
-	var sqrt1 = "sqrt(1- ("+ xa +")^2 - ("+ya + ")^2)";
-	var sqrt2 = "sqrt(1- ("+ xb +")^2 - ("+yb + ")^2)";
-	var inside = parser.eval(top + " / ( " + sqrt1 + " * " + sqrt2 + " )");
+	// euclideszi normakkal
+	// top: 2 * |a-b|^2
+	var top = "2 * ((("+xa+")-("+xb+"))^2+(("+ya+")-("+yb+"))^2)";
+	// bottom: (1-|a|^2)*(1-|b|^2)
+	var sqrt1 = "sqrt(1 - ("+ xa +")^2 - ("+ya + ")^2)";
+	var sqrt2 = "sqrt(1 - ("+ xb +")^2 - ("+yb + ")^2)";
+	// distance: acosh(1+d(a,b))
+	var inside = parser.eval("1+("+top + " / ( " + sqrt1 + " * " + sqrt2 + " ))");
 	
-	var cosh = parser.eval("log(2*(" + inside + ") - 1 / sqrt((" + inside + ")^2-1))");
-	console.log(top + " / ( " + sqrt1 + " * " + sqrt2 + " )");
+	// acosh ~ ln(x+sqrt(x^2-1))
+	var acosh = parser.eval("log((" + inside + ") + sqrt((" + inside + ")^2-1), e)");
+	console.log("inside:" + inside);
+	console.log("acosh:" + acosh);
 	
-	return Math.sqrt(Math.pow((this.hypX - o.hypX), 2) + Math.pow((this.hypX - o.hypX), 2));
-	
-	//return cosh;
+	return acosh;
 });
 
 Vertex.prototype.distanceFromP = (function(o) {
@@ -188,6 +192,7 @@ Graph.prototype.calculateSpt = (function (root) {
         current = queue.shift();
 		//console.log("Curr vertex: " + current);
 		// search children
+		var fff = 0;
 		for (var idx in this.edges) {
 			var edge = this.edges[idx];
 			inTheTree[current.id] = true;
@@ -196,13 +201,16 @@ Graph.prototype.calculateSpt = (function (root) {
 				queue.push(edge.e);
 				edge.e.parent = current;
 				current.children.push(edge.e);
+				fff++;
 			}
 			if( edge.e.id == current.id && !inTheTree[edge.v.id]) {
 				inTheTree[edge.v.id] = true;
 				queue.push(edge.v);
 				edge.v.parent = current;
 				current.children.push(edge.v);
+				fff++;
 			}
+			if (fff > 4) break;
 		}
     };
 	
@@ -215,6 +223,8 @@ Graph.prototype.calculateSpt = (function (root) {
 });
 
 Graph.prototype.calculateHyperbolicCoordinates = (function () {
+
+	return this.calculateHyperbolicCoordinatesB();
 
 	var math = mathjs();
 	var parser = math.parser();
@@ -271,6 +281,106 @@ Graph.prototype.calculateHyperbolicCoordinates = (function () {
 	
 });
 
+Graph.prototype.calculateHyperbolicCoordinatesB = (function () {
+	// works only for reg-3 graphs
+	console.log("calculating hyperbolic coordinates");
+	var math = mathjs();
+	var parser = math.parser();
+	
+	var queue = [];
+	
+	// inverse functions from maple:
+	// ainv: x -> -x
+	// binv: x -> -(2ix - x + 1)/(2i-x+1)
+	
+	// reg-3 is good with fixed a, b, u, v
+	var u = parser.eval("(2 - sqrt(3)) * i");
+	console.log(u);
+	var v = math.multiply(u, -1);
+	
+	var maxWidth = 3 ; // in fact, constant width
+	
+	if (this.root == null) return;
+	
+	this.root.hypA = 'a';
+	this.root.hypC = math.multiply(-1, v); // ainv(v);
+	this.root.hypX = math.re(this.root.hypC);
+	this.root.hypY = math.im(this.root.hypC);
+	
+	console.log("--- root ");
+	console.log(this.root.hypA);
+	console.log(this.root.hypC);
+	console.log(this.root.hypX + "  --  " + this.root.hypY);
+	
+	for (idx in this.root.children) {
+		queue.push(this.root.children[idx]);
+	}
+	
+	while (queue.length != 0) {
+		var item = queue.shift();
+		var idx = item.parent.children.indexOf(item) + 1;
+		console.log("--- child: " + idx);
+				
+		// calculate
+		item.hypA = item.parent.hypA + 'a';
+		for (var i=0;i<idx;i++) {
+			item.hypA += 'b';
+		}
+		console.log(item.hypA);
+
+		var r1 = v;
+		for (var i=item.hypA.length-1;i>=0;i--) {
+			if (item.hypA[i] == 'b') {
+				r1 = parser.eval("-(2*i*("+r1+")-("+r1+")+1)/(1+2*i-("+r1+"))");
+				console.log("binv: " + r1);
+			} else {
+				r1 = parser.eval("-("+r1+")");
+				console.log("ainv: " + r1);
+			}
+		}
+				
+		item.hypC = r1;	
+		item.hypX = math.re(item.hypC);
+		item.hypY = math.im(item.hypC);
+		console.log(item.hypX + "  --  " + item.hypY);
+		
+		// add children tot he queue
+		for (idx in item.children) {
+			queue.push(item.children[idx]);
+		}
+		//break;
+	}
+});
+
+function generateReg3Verticles() {
+	var v = [];
+	var radius = 25;
+	
+	var dVert = 20;
+	var dDiag = 20 / Math.sqrt(2);
+	
+	var center = [50,50];
+	var i = 1;
+	
+	v.push(new Vertex(i++, center[0], center[1], radius));
+	
+	// top 
+	v.push(new Vertex(i++, center[0], center[1] - dVert, radius));
+	v.push(new Vertex(i++, center[0] - dDiag, center[1] - dVert - dDiag, radius));
+	v.push(new Vertex(i++, center[0] + dDiag, center[1] - dVert - dDiag, radius));
+	
+	// left
+	v.push(new Vertex(i++, center[0] - dDiag, center[1] + dDiag, radius));
+	v.push(new Vertex(i++, center[0] - dDiag, center[1] + dDiag + dVert, radius));
+	v.push(new Vertex(i++, center[0] - 2 * dDiag, center[1], radius));
+	
+	// right
+	v.push(new Vertex(i++, center[0] + dDiag, center[1] + dDiag, radius));
+	v.push(new Vertex(i++, center[0] + dDiag, center[1] + dDiag + dVert, radius));
+	v.push(new Vertex(i++, center[0] + 2 * dDiag, center[1], radius));
+	
+	return v;
+}
 
 function generateVerticles(n, radius) {
 	var v = [];

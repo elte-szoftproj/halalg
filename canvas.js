@@ -62,7 +62,7 @@ GraphCanvas.prototype.dblclick = (function(sx, sy) {
 	
 	if (f != null) {
 		this.graph.calculateSpt(f);
-		this.graph.calculateHyperbolicCoordinates();
+		this.graph.calculateHyperbolicCoordinatesB();
 	}
 	this.draw();
 });
@@ -287,17 +287,20 @@ GraphCanvas.prototype.drawNormal = (function() {
 		} else if (vert == this.endNode) {
 			ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 5, 0, 2 * Math.PI, false);
 			ctx.fillStyle = 'orange';
-		} else if (vert.onNormalRoute || vert.onHyperbolicRoute) {
+		} else {
+			ctx.fillStyle = 'green';
+		}
+		if (vert.onNormalRoute || vert.onHyperbolicRoute) {
 			if (vert.onNormalRoute) {
-				ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 10, 0, 2 * Math.PI, false);
-				ctx.fillStyle = 'cyan';
+				ctx.beginPath();
+				ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 15, 0, 2 * Math.PI, false);
+				ctx.fillStyle = 'purple';
 			}
 			if (vert.onHyperbolicRoute) {
+				ctx.beginPath();
 				ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 7, 0, 2 * Math.PI, false);
 				ctx.fillStyle = 'orange';
 			}
-		} else {
-			ctx.fillStyle = 'green';
 		}
 		ctx.fill();
 	}
