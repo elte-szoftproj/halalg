@@ -141,8 +141,8 @@ GraphCanvas.prototype.drawHyperbolic = (function() {
 			ctx.beginPath();
 			ctx.lineTo(centX + (vert1.hypX * radius), centY + (vert1.hypY * radius));
 			ctx.lineTo(centX + (vert2.hypX * radius), centY + (vert2.hypY * radius));
-			ctx.strokeStyle = '#72FF72';
-			ctx.lineWidth = 10;
+			ctx.strokeStyle = '#7272FF';
+			ctx.lineWidth = 15;
 			ctx.stroke();	
 		}
 		
@@ -162,8 +162,8 @@ GraphCanvas.prototype.drawHyperbolic = (function() {
 			ctx.beginPath();
 			ctx.moveTo(centX + (curr.hypX * radius), centY + (curr.hypY * radius));
 			ctx.lineTo(centX + (curr.onNormalRouteTo.hypX * radius), centY + (curr.onNormalRouteTo.hypY * radius));
-			ctx.strokeStyle = 'orange';
-			ctx.lineWidth = 5;
+			ctx.strokeStyle = 'lightgreen';
+			ctx.lineWidth = 9;
 			ctx.stroke();
 			curr = curr.onNormalRouteTo;
 		}
@@ -174,7 +174,7 @@ GraphCanvas.prototype.drawHyperbolic = (function() {
 			ctx.beginPath();
 			ctx.moveTo(centX + (curr.hypX * radius), centY + (curr.hypY * radius));
 			ctx.lineTo(centX + (curr.onHyperbolicRouteTo.hypX * radius), centY + (curr.onHyperbolicRouteTo.hypY * radius));
-			ctx.strokeStyle = 'yellow';
+			ctx.strokeStyle = 'darkgreen';
 			ctx.lineWidth = 3;
 			ctx.stroke();
 			curr = curr.onHyperbolicRouteTo;
@@ -254,8 +254,8 @@ GraphCanvas.prototype.drawNormal = (function() {
 			ctx.beginPath();
 			ctx.moveTo(this.normalPadleft + curr.normalX * this.normalRatio, curr.normalY * this.normalRatio);
 			ctx.lineTo(this.normalPadleft + curr.onNormalRouteTo.normalX * this.normalRatio, curr.onNormalRouteTo.normalY * this.normalRatio);
-			ctx.strokeStyle = 'orange';
-			ctx.lineWidth = 5;
+			ctx.strokeStyle = 'lightgreen';
+			ctx.lineWidth = 9;
 			ctx.stroke();
 			curr = curr.onNormalRouteTo;
 		}
@@ -266,7 +266,7 @@ GraphCanvas.prototype.drawNormal = (function() {
 			ctx.beginPath();
 			ctx.moveTo(this.normalPadleft + curr.normalX * this.normalRatio, curr.normalY * this.normalRatio);
 			ctx.lineTo(this.normalPadleft + curr.onHyperbolicRouteTo.normalX * this.normalRatio, curr.onHyperbolicRouteTo.normalY * this.normalRatio);
-			ctx.strokeStyle = 'yellow';
+			ctx.strokeStyle = 'darkgreen';
 			ctx.lineWidth = 3;
 			ctx.stroke();
 			curr = curr.onHyperbolicRouteTo;
