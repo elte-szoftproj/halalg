@@ -311,7 +311,7 @@ GraphCanvas.prototype.drawNormal = (function() {
 		ctx.fill();
 		if (vert == this.graph.root) {
 			ctx.beginPath();
-			ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 5, 0, 2 * Math.PI, false);
+			ctx.arc(this.normalPadleft + vert.normalX * this.normalRatio, vert.normalY * this.normalRatio, 3, 0, 2 * Math.PI, false);
 			ctx.fillStyle = 'red';
 			ctx.fill();
 		}
