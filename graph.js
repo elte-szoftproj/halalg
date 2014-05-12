@@ -373,6 +373,7 @@ function generateReg3Verticles() {
 	v.push(new Vertex(i++, center[0] - dDiag, center[1] + dDiag, radius));
 	v.push(new Vertex(i++, center[0] - dDiag, center[1] + dDiag + dVert, radius));
 	v.push(new Vertex(i++, center[0] - 2 * dDiag, center[1], radius));
+	v.push(new Vertex(i++, center[0] - dDiag * 0.7, center[1] + dDiag + dVert * 1.3, radius));
 	
 	// right
 	v.push(new Vertex(i++, center[0] + dDiag, center[1] + dDiag, radius));
